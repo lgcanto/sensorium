@@ -1,0 +1,13 @@
+- Run all commands in /archtect-software-challenge:
+- Development
+    - Database
+    - Backend
+        - docker build --tag seback-dev backend/dev/
+        - docker run --name=seback-dev --network=archtect-software-challenge_default -d -v `pwd`/backend/Sensorium:/Sensorium -p 5000:5000 -p 5001:5001 seback-dev
+    - Frontend
+        - docker build --tag sefront-dev frontend/dev/
+        - docker run --name=sefront-dev --network=archtect-software-challenge_default -d -v `pwd`/frontend/Sensorium:/Sensorium -p 4200:4200 sefront-dev
+- Prod
+    - Frontend
+        - docker build -t sefront ./frontend/
+        - docker run --name sefront -d -p 4200:4200 --network=archtect-software-challenge_default sefront

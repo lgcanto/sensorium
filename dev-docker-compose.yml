@@ -1,0 +1,39 @@
+version: '3.4'
+services:
+  db:
+    image: "postgres:9.6.18-alpine"
+    container_name: sedb
+    environment:
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+  backend:
+    build: ./backend/dev
+    image: seback-dev
+    container_name: seback-dev
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    volumes:
+      - ./backend/Sensorium:/Sensorium
+  frontend:
+    build:
+      context: ./frontend/dev
+      network: host
+    image: sefront-dev
+    container_name: sefront-dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend/Sensorium:/Sensorium
+  # keycloak:
+  #   image: "quay.io/keycloak/keycloak:10.0.2"
+  #   container_name: sekeycloak
+  #   volumes:
+  #     - ./keycloak/sensorium-realm.json:/tmp/my-realm.json
+  #   environment:
+  #     - KEYCLOAK_USER=admin
+  #     - KEYCLOAK_PASSWORD=admin
+  #     - KEYCLOAK_IMPORT=/tmp/sensorium-realm.json
+  #   ports:
+  #     - "8080:8080"

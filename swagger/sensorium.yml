@@ -1,0 +1,123 @@
+swagger: "2.0"
+info:
+  title: "Sensorium API"
+  description: "Sensorium API"
+  version: 0.0.0
+schemes:
+- "https"
+host: "0.0.0.0:5001"
+basePath: "/api"
+paths:
+  /SensorData/Add:
+    post:
+      summary: "Send a single sensor data"
+      security:
+      - ApiKeyAuth: []
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Sensor data object"
+        required: true
+        schema:
+          $ref: '#/definitions/SensorData'
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: "Unathorized"
+        "500":
+          description: "Internal server error"
+  /SensorData/GetAll:
+    get:
+      summary: "Get sensors data collection"
+      security:
+        - OAuth2: [read]
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SensorData'
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /SensorData/GetAllNumeric:
+    get:
+      summary: "Get numberic sensors data collection"
+      security:
+        - OAuth2: [read]
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SensorData'
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+          schema:
+            $ref: '#/definitions/ErrorMessage'
+  /SensorData/GetCountByFilter:
+    get:
+      summary: "Get sensors data collection by filter"
+      security:
+        - OAuth2: [read]
+      parameters:
+        - name: "filter"
+          in: "query"
+          description: "Filter describing country, region, state, sensor, etc ({country}.{region}.{state}.{sensor})"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: number
+        "401":
+          description: "Unauthorized"
+        "500":
+          description: "Internal server error"
+          schema:
+            $ref: "#/definitions/ErrorMessage"
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  OAuth2:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://example.com/oauth/token
+    scopes:
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
+definitions:
+  SensorData:
+    type: object
+    properties:
+      timestamp:
+        type: number
+      tag:
+        type: string
+      valor:
+        type: string
+  ErrorMessage:
+    type: object
+    properties:
+      code:
+        type: string
+        enum:
+          - INVALID_DATA
+          - INTERNAL_ERROR
+        example: INVALID_DATA
+      message:
+        type: string
+        example: Invalid state parameters

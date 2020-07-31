@@ -1,0 +1,19 @@
+<div class="jumbotron" style="background-color: #fff; height: calc(95vh);">
+  <h3>Graph</h3>
+  <p class="lead">
+    Graph with all numeric sensors
+  </p>
+  <div style="display: block;">
+    <canvas *ngIf="lineChartData.length > 0" baseChart width="auto" height="auto"
+      [datasets]="lineChartData"
+      [labels]="lineChartLabels"
+      [options]="lineChartOptions"
+      [colors]="lineChartColors"
+      [legend]="lineChartLegend"
+      [chartType]="lineChartType">
+    </canvas>
+    <div *ngIf="lineChartData.length === 0">
+      No numeric data found.
+    </div>
+  </div>
+</div>

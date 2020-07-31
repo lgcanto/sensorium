@@ -1,0 +1,42 @@
+<div class="jumbotron" style="background-color: #fff; height: calc(95vh);">
+  <h3>Table</h3>
+  <p class="lead">
+    Table with all received data from sensors
+  </p>
+  <form>
+    <div class="form-group form-inline">
+        Full text search: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="tableService.searchTerm"/>
+        <span class="ml-3" *ngIf="tableService.loading$ | async">Loading...</span>
+    </div>
+  
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col" sortable="timestamp" (sort)="onSort($event)">Timestamp</th>
+        <th scope="col" sortable="tag" (sort)="onSort($event)">Tag</th>
+        <th scope="col" sortable="valor" (sort)="onSort($event)">Value</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let sensor of sensors$ | async">
+        <td><ngb-highlight [result]="sensor.timestamp * 1000 | date:'full'" [term]="tableService.searchTerm"></ngb-highlight></td>
+        <td><ngb-highlight [result]="sensor.tag" [term]="tableService.searchTerm"></ngb-highlight></td>
+        <td><ngb-highlight [result]="sensor.valor" [term]="tableService.searchTerm"></ngb-highlight></td>
+      </tr>
+      </tbody>
+    </table>
+  
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="(total$ | async)!" [(page)]="tableService.page" [pageSize]="tableService.pageSize">
+      </ngb-pagination>
+
+      <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="tableService.pageSize">
+        <option [ngValue]="10">10 items per page</option>
+        <option [ngValue]="20">20 items per page</option>
+        <option [ngValue]="30">30 items per page</option>
+      </select>
+    </div>
+  
+  </form>
+</div>
